@@ -46,24 +46,20 @@ func main() {
 		rightSlice = append(rightSlice, right)
 	}
 
-	// Print the slices
-	//fmt.Println("Left Slice:", leftSlice)
-	//fmt.Println("Right Slice:", rightSlice)
-
-	//unsorted input
-	//leftUnsorted := []int{0, 3, 4, 5, 8}
-	//rightUnsorted := []int{6, 6, 6, 7, 9}
-	//43284 25771
-	//leftUnsorted := []int{2, 8, 1, 8, 6}
-	//rightUnsorted := []int{3, 5, 6, 2, 7}
-	//sorted values
 	leftSorted := sort(leftSlice)
 	rightSorted := sort(rightSlice)
 	//Get distance by subtracting both inputs
 	distance := getDistance(leftSorted, rightSorted)
 	//get total distance
 	totalDistance := totalDistance(distance)
-	fmt.Println(totalDistance)
+	fmt.Println("Total distance: ", totalDistance)
+
+	duplicate := countDuplicate(leftSorted, rightSorted)
+
+	repeatSum := sumOfRepeat(duplicate)
+
+	fmt.Println("Sum of repeated numbers: ", repeatSum)
+
 }
 
 // sort the list
@@ -89,7 +85,7 @@ func abs(number int) int {
 
 // Get the difference of both slices
 func getDistance(slice1 []int, slice2 []int) []int {
-	difference := []int{}
+	var difference []int
 	for i := 0; i < len(slice1); i++ {
 		difference = append(difference, abs(slice1[i]-slice2[i]))
 	}
@@ -105,20 +101,27 @@ func totalDistance(distance []int) int {
 	return total
 }
 
-func readFromFile(filename string) []int {
-	bs, err := os.ReadFile(filename)
-	if err != nil {
-		fmt.Println("Error: ", err)
-		os.Exit(1)
+// Get duplicate
+func countDuplicate(leftSlice []int, rightSlice []int) []int {
+
+	var myRepeatList []int
+	for i := 0; i < len(leftSlice); i++ {
+		counter := 0
+		for j := 0; j < len(rightSlice); j++ {
+			if leftSlice[i] == rightSlice[j] {
+				counter++
+			}
+		}
+		myRepeatList = append(myRepeatList, leftSlice[i]*counter)
 	}
 
-	//convert slice of byte to string
-	wholeString := string(bs)
+	return myRepeatList
+}
 
-	//convert string to slice of strings
-	s := strings.Split(wholeString, " ")
-
-	fmt.Println(s)
-
-	return []int{1, 2, 3}
+func sumOfRepeat(slice []int) int {
+	sum := 0
+	for i := 0; i < len(slice); i++ {
+		sum += slice[i]
+	}
+	return sum
 }
